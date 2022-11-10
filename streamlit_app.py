@@ -61,6 +61,7 @@ if __name__ == "__main__":
 
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
+            st.write(type(covid_votes))
 #             st.dataframe(covid_votes)
             fig = px.pie(covid_votes, values=0, title='Votes')
             # Plot!
