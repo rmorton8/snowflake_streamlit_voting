@@ -47,7 +47,7 @@ def grab_data_from_snowflake(table_name):
         return pd.DataFrame(my_cur.fetchall())
     my_cnx.close()
     
-def grab_and_plot_data(table_name, values)
+def grab_and_plot_data(table_name, values):
     votes = grab_data_from_snowflake(table_name)
     if len(votes) >= 2:
         # transform votes
