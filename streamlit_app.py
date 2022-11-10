@@ -2,8 +2,7 @@
 import snowflake.connector
 import streamlit as st
 import pandas as pd
-import plotly
-# import plotly.express as px
+import plotly.express as px
 
 st.set_page_config(
     page_title="Streamlit Demo",
@@ -63,7 +62,10 @@ if __name__ == "__main__":
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
             st.dataframe(covid_votes)
-#             st.plotly_chart(
+            fig = px.pie(covid_votes, title='Votes')
+            
+            # Plot!
+            st.plotly_chart(fig, use_container_width=True)
 
 #             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
 #             bank = st.selectbox("Which is less desirable?",
