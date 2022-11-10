@@ -25,7 +25,8 @@ if __name__ == "__main__":
 
      def insert_row_into_snowflake(vote_choice):
          with my_cnx.cursor() as my_cur:
-             my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")    
+             my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
+         return
      # Use columns to display the three dataframes side-by-side along with their headers
      col1, col2 = st.columns(2)
      with st.container():
@@ -37,11 +38,12 @@ if __name__ == "__main__":
 
              else:
                  st.write(f'thanks for voting!')
-                 my_cnx = snowflake.connector.connect()
+                 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+                 insert_row_into_snowflake(covid)
 
          with col2:
              st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
-             covid = st.selectbox("Which is less desirable?", ("bank places a hold on your account, but there was no fraud",
+             bank = st.selectbox("Which is less desirable?", ("bank places a hold on your account, but there was no fraud",
                                                                "bank misses detecting fraud and no hold is placed"))
 
 
