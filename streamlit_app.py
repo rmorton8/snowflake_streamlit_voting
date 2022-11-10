@@ -43,7 +43,7 @@ if __name__ == "__main__":
         my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
         with my_cnx.cursor() as my_cur:
             my_cur.execute(f"select * from {table_name}")
-            return my_cur.fetchall()
+            return pd.DataFrame(my_cur.fetchall())
         my_cnx.close()
         
     # Use columns to display the three dataframes side-by-side along with their headers
