@@ -21,53 +21,109 @@ covid_dict = {
     "test negative, but do have COVID": 'test negative'
 }
 
-if __name__ == "__main__":
-    # Add header and a subheader
-    st.title('Streamlit Demo -- this is a streamlit title function')
-    st.subheader(
-        "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit -- subheader function")
-    st.header("Select which situations are less desirable header, then click the button to vote")
+bank_dict = {
+    "bank places hold on credit card, but no fraud occurred": 'credit hold',
+    "bank doesn't place a hold, but there was fraud!": 'no-hold, but fraud!'
+}
+
+school_dict = {
+    "Rejection letter, but it's a mistake and you were actually admitted!": 'false rejection',
+    "Acceptance letter, but you were actually mean to be rejected!": 'false acceptance'
+}
 
 
-    # url = 'cOloRs aNd sIzE CaN bE aDjuStEd bY iNserTiNg HTML string iNtO a mArkDoWn fUncTiOn'
-    # st.markdown(f'<p style="background-color:#0066cc;color:#33ff33;font-size:24px;border-radius:2%;">{url}</p>', unsafe_allow_html=True)
-
-    def insert_row_into_snowflake(vote_choice):
+def insert_row_into_snowflake(vote_choice):
         my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
         with my_cnx.cursor() as my_cur:
             my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
             return
         my_cnx.close()
-        
-    def grab_data_from_snowflake(table_name):
-        my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
-        with my_cnx.cursor() as my_cur:
-            my_cur.execute(f"select * from {table_name}")
-            return pd.DataFrame(my_cur.fetchall())
-        my_cnx.close()
-        
-    # Use columns to display the three dataframes side-by-side along with their headers
+    
+    
+def grab_data_from_snowflake(table_name):
+    my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute(f"select * from {table_name}")
+        return pd.DataFrame(my_cur.fetchall())
+    my_cnx.close()
+    
+def grab_and_plot_data(table_name, values)
+    votes = grab_data_from_snowflake(table_name)
+    if len(votes) >= 2:
+        # transform votes
+        counts = votes.value_counts()
+        data_dict = {'options': values, 'values': [counts[values[0]], counts[values[1]]]}
+        final_df = pd.DataFrame(data_dict)
+        # plot
+        fig = px.pie(final_df, values='values', names='options', title='Voting Results')
+        st.plotly_chart(fig, use_container_width=True)
+    else:
+        st.write('waiting for votes')
+    return
+
+    
+if __name__ == "__main__":
+    # Add header and a subheader
+    st.title('Streamlit Voting Demo')
+    st.subheader(
+        "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
+    st.header("Vote for the situations you think are less desirable!")
+    
+    # COVID section
     col1, col2 = st.columns(2)
     with st.container():
         with col1:
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
-            covid = st.selectbox("Which is less desirable?",
+            output = st.selectbox("Which is less desirable?",
                                  tuple(covid_dict.keys()))
             if not st.button('Vote'):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(covid_dict[covid])
+                insert_row_into_snowflake(covid_dict[output])
 
         with col2:
-            covid_votes = grab_data_from_snowflake('COVID_VOTES')
-            if len(covid_votes) >= 2:
-                counts = covid_votes.value_counts()
-                data_dict = {'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']]}
-                final_df = pd.DataFrame(data_dict)
-
-                fig = px.pie(final_df, values='values', names='options', title='Votes')
-                # Plot!
-                st.plotly_chart(fig, use_container_width=True)
+            grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values())
+#             covid_votes = grab_data_from_snowflake('COVID_VOTES')
+#             if len(covid_votes) >= 2:
+#                 # transform votes
+#                 counts = covid_votes.value_counts()
+#                 data_dict = {'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']]}
+#                 final_df = pd.DataFrame(data_dict)
+#                 # plot
+#                 fig = px.pie(final_df, values='values', names='options', title='Results')
+#                 st.plotly_chart(fig, use_container_width=True)
+#             else:
+#                 st.write('waiting for votes')
+    
+    # Bank section
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
+            output = st.selectbox("Which is less desirable?",
+                                 tuple(bank_dict.keys()))
+            if not st.button('Vote'):
+                st.write('please vote')
             else:
-                st.write('waiting for votes')
+                st.write(f'thanks for voting!')
+                insert_row_into_snowflake(bank_dict[output])
+
+        with col2:
+            grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values())
+    
+    # SCHOOL section
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.subheader("It's your senior year of highschool and you recieve an admissions letter from your dream school.")
+            output = st.selectbox("Which is less desirable?",
+                                 tuple(school_dict.keys()))
+            if not st.button('Vote'):
+                st.write('please vote')
+            else:
+                st.write(f'thanks for voting!')
+                insert_row_into_snowflake(school_dict[output])
+
+        with col2:
+            grab_and_plot_data('SCHOOL_VOTES', values=list(bank_dict.values())
