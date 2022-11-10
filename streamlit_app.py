@@ -24,7 +24,7 @@ if __name__ == "__main__":
      # st.markdown(f'<p style="background-color:#0066cc;color:#33ff33;font-size:24px;border-radius:2%;">{url}</p>', unsafe_allow_html=True)
 
      def insert_row_into_snowflake(vote_choice):
-         my_cnx = snowflake.connector.connect(**streamlit.secrets['snowflake'])
+         my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
          with my_cnx.cursor() as my_cur:
              my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
          return
