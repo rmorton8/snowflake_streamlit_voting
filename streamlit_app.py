@@ -66,7 +66,7 @@ def grab_and_plot_data(table_name, values):
 if __name__ == "__main__":
     # Add header and a subheader
     st.title('Streamlit Voting Demo')
-    st.subheader(
+    st.write(
         "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
     st.header("Vote for the situations you think are less desirable!")
 
@@ -77,7 +77,7 @@ if __name__ == "__main__":
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
             output = st.selectbox("Which is less desirable?",
                                   tuple(covid_dict.keys()))
-            if not st.button('Vote'):
+            if not st.button('Vote', key=1):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
@@ -93,7 +93,7 @@ if __name__ == "__main__":
             st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
             output = st.selectbox("Which is less desirable?",
                                   tuple(bank_dict.keys()))
-            if not st.button('Vote'):
+            if not st.button('Vote', key=2):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
@@ -110,7 +110,7 @@ if __name__ == "__main__":
                 "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
             output = st.selectbox("Which is less desirable?",
                                   tuple(school_dict.keys()))
-            if not st.button('Vote'):
+            if not st.button('Vote', key=3):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
