@@ -61,12 +61,12 @@ if __name__ == "__main__":
 
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
-            st.write(type(covid_votes))
-            st.dataframe(covid_votes)
-            fig = px.pie(covid_votes, values=0, title='Votes')
+#             st.write(type(covid_votes))
+#             st.dataframe(covid_votes)
+#             fig = px.pie(covid_votes, values=0, title='Votes')
             # Plot!
-            st.plotly_chart(fig, use_container_width=True)
-
+#             st.plotly_chart(fig, use_container_width=True)
+            st.bar_chart(covid_votes)
 #             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
 #             bank = st.selectbox("Which is less desirable?",
 #                                 ("bank places a hold on your account, but there was no fraud",
