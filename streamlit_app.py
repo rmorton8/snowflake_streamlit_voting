@@ -61,9 +61,8 @@ if __name__ == "__main__":
 
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
-            st.dataframe(covid_votes)
-            fig = px.pie(covid_votes, title='Votes')
-            
+#             st.dataframe(covid_votes)
+            fig = px.pie(covid_votes, values='VOTE', title='Votes')
             # Plot!
             st.plotly_chart(fig, use_container_width=True)
 
