@@ -31,10 +31,10 @@ school_dict = {
 }
 
 
-def insert_row_into_snowflake(vote_choice):
+def insert_row_into_snowflake(vote_choice, table_name):
     my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
     with my_cnx.cursor() as my_cur:
-        my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
+        my_cur.execute(f"insert into {table_name} values ('{vote_choice}')")
     my_cnx.close()
     return
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(covid_dict[output])
+                insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
 
         with col2:
             grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
@@ -97,7 +97,7 @@ if __name__ == "__main__":
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(bank_dict[output])
+                insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
 
         with col2:
             grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
@@ -114,7 +114,7 @@ if __name__ == "__main__":
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(school_dict[output])
+                insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
 
         with col2:
             grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
