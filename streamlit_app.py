@@ -62,7 +62,7 @@ if __name__ == "__main__":
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
             counts = covid_votes.value_counts()
-            final_df = pd.DataFrame('options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive'])
+            final_df = pd.DataFrame({'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']})
             
             fig = px.pie(final_df, values='values', names='options', title='Votes')
             # Plot!
