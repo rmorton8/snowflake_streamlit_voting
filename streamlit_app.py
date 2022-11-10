@@ -1,7 +1,10 @@
 # Snowpark
 import snowflake.connector
+from snowflake.snowpark.session import Session
+
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 st.set_page_config(
     page_title="Streamlit Demo",
@@ -13,6 +16,20 @@ st.set_page_config(
         'About': "This is an *extremely* cool app powered by Snowpark for Python, Streamlit, and Snowflake Data Marketplace"
     }
 )
+
+def create_session_object():
+    connection_parameters = {
+          "account": "ae08019.ca-central-1.aws",
+          "user": "mortonworkshop",
+          "password": "MtaXe0oO10eG",
+          "role": "accountadmin",
+          "warehouse": "compute_wh",
+          "database": "ds_tom_voting",
+          "schema": "public"
+       }
+    session = Session.builder.configs(connection_parameters).create()
+    print(session.sql('select current_warehouse(), current_database(), current_schema()').collect())
+    return session
 
 covid_dict = {
     "test positive, but don't have COVID": 'test positive',
@@ -51,10 +68,13 @@ if __name__ == "__main__":
                 insert_row_into_snowflake(covid_dict[covid])
 
         with col2:
-            st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
-            bank = st.selectbox("Which is less desirable?",
-                                ("bank places a hold on your account, but there was no fraud",
-                                 "bank misses detecting fraud and no hold is placed"))
+            covid_votes = session.table("PUBLIC.COVID_VOTES").to_pandas()
+            st.dataframe(covid_votes)
+
+#             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
+#             bank = st.selectbox("Which is less desirable?",
+#                                 ("bank places a hold on your account, but there was no fraud",
+#                                  "bank misses detecting fraud and no hold is placed"))
 
 
 
