@@ -1,6 +1,5 @@
 # Snowpark
 import snowflake.connector
-from snowflake.snowpark import Session
 
 import streamlit as st
 import pandas as pd
@@ -17,19 +16,6 @@ st.set_page_config(
     }
 )
 
-def create_session_object():
-    connection_parameters = {
-          "account": "ae08019.ca-central-1.aws",
-          "user": "mortonworkshop",
-          "password": "MtaXe0oO10eG",
-          "role": "accountadmin",
-          "warehouse": "compute_wh",
-          "database": "ds_tom_voting",
-          "schema": "public"
-       }
-    session = Session.builder.configs(connection_parameters).create()
-    print(session.sql('select current_warehouse(), current_database(), current_schema()').collect())
-    return session
 
 covid_dict = {
     "test positive, but don't have COVID": 'test positive',
@@ -51,9 +37,16 @@ if __name__ == "__main__":
         my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
         with my_cnx.cursor() as my_cur:
             my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
-        return
-
-
+            return
+        my_cnx.close()
+        
+    def grab_data_from_snowflake(table_name):
+        my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+        with my_cnx.cursor() as my_cur:
+            my_cur.execute(f"select * from {table_name}")
+            return my_cur.fetchall()
+        my_cnx.close()
+        
     # Use columns to display the three dataframes side-by-side along with their headers
     col1, col2 = st.columns(2)
     with st.container():
@@ -68,7 +61,7 @@ if __name__ == "__main__":
                 insert_row_into_snowflake(covid_dict[covid])
 
         with col2:
-            covid_votes = session.table("PUBLIC.COVID_VOTES").to_pandas()
+            covid_votes = grab_data_from_snowflake('COVID_VOTES')
             st.dataframe(covid_votes)
 
 #             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
