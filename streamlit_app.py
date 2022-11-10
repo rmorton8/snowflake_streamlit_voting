@@ -61,18 +61,13 @@ if __name__ == "__main__":
 
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
-            counts = covid_votes.value_counts()
-            data_dict = {'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']]}
-            final_df = pd.DataFrame(data_dict)
-            
-            fig = px.pie(final_df, values='values', names='options', title='Votes')
-            # Plot!
-            st.plotly_chart(fig, use_container_width=True)
-            st.bar_chart(covid_votes)
-#             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
-#             bank = st.selectbox("Which is less desirable?",
-#                                 ("bank places a hold on your account, but there was no fraud",
-#                                  "bank misses detecting fraud and no hold is placed"))
+            if len(covid_votes) >= 2:
+                counts = covid_votes.value_counts()
+                data_dict = {'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']]}
+                final_df = pd.DataFrame(data_dict)
 
-
-
+                fig = px.pie(final_df, values='values', names='options', title='Votes')
+                # Plot!
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.write('waiting for votes')
