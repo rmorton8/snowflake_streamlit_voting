@@ -15,7 +15,6 @@ st.set_page_config(
     }
 )
 
-
 covid_dict = {
     "test positive, but don't have COVID": 'test positive',
     "test negative, but do have COVID": 'test negative'
@@ -33,20 +32,22 @@ school_dict = {
 
 
 def insert_row_into_snowflake(vote_choice):
-        my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
-        with my_cnx.cursor() as my_cur:
-            my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
-            return
-        my_cnx.close()
-    
-    
+    my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
+    my_cnx.close()
+    return
+
+
 def grab_data_from_snowflake(table_name):
     my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
     with my_cnx.cursor() as my_cur:
         my_cur.execute(f"select * from {table_name}")
-        return pd.DataFrame(my_cur.fetchall())
+        output = pd.DataFrame(my_cur.fetchall())
     my_cnx.close()
+    return output
     
+
 def grab_and_plot_data(table_name, values):
     votes = grab_data_from_snowflake(table_name)
     if len(votes) >= 2:
@@ -61,21 +62,21 @@ def grab_and_plot_data(table_name, values):
         st.write('waiting for votes')
     return
 
-    
+
 if __name__ == "__main__":
     # Add header and a subheader
     st.title('Streamlit Voting Demo')
     st.subheader(
         "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
     st.header("Vote for the situations you think are less desirable!")
-    
+
     # COVID section
     col1, col2 = st.columns(2)
     with st.container():
         with col1:
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
             output = st.selectbox("Which is less desirable?",
-                                 tuple(covid_dict.keys()))
+                                  tuple(covid_dict.keys()))
             if not st.button('Vote'):
                 st.write('please vote')
             else:
@@ -84,25 +85,14 @@ if __name__ == "__main__":
 
         with col2:
             grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values())
-#             covid_votes = grab_data_from_snowflake('COVID_VOTES')
-#             if len(covid_votes) >= 2:
-#                 # transform votes
-#                 counts = covid_votes.value_counts()
-#                 data_dict = {'options': ['test positive', 'test negative'], 'values': [counts['test negative'], counts['test positive']]}
-#                 final_df = pd.DataFrame(data_dict)
-#                 # plot
-#                 fig = px.pie(final_df, values='values', names='options', title='Results')
-#                 st.plotly_chart(fig, use_container_width=True)
-#             else:
-#                 st.write('waiting for votes')
-    
+            
     # Bank section
     col1, col2 = st.columns(2)
     with st.container():
         with col1:
             st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
             output = st.selectbox("Which is less desirable?",
-                                 tuple(bank_dict.keys()))
+                                  tuple(bank_dict.keys()))
             if not st.button('Vote'):
                 st.write('please vote')
             else:
@@ -111,14 +101,15 @@ if __name__ == "__main__":
 
         with col2:
             grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values())
-    
-    # SCHOOL section
+
+        # SCHOOL section
     col1, col2 = st.columns(2)
     with st.container():
         with col1:
-            st.subheader("It's your senior year of highschool and you recieve an admissions letter from your dream school.")
+            st.subheader(
+                "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
             output = st.selectbox("Which is less desirable?",
-                                 tuple(school_dict.keys()))
+                                  tuple(school_dict.keys()))
             if not st.button('Vote'):
                 st.write('please vote')
             else:
