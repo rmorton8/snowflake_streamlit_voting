@@ -46,7 +46,7 @@ def grab_data_from_snowflake(table_name):
         output = pd.DataFrame(my_cur.fetchall())
     my_cnx.close()
     return output
-    
+
 
 def grab_and_plot_data(table_name, values):
     votes = grab_data_from_snowflake(table_name)
@@ -84,8 +84,8 @@ if __name__ == "__main__":
                 insert_row_into_snowflake(covid_dict[output])
 
         with col2:
-            grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values())
-            
+            grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
+    
     # Bank section
     col1, col2 = st.columns(2)
     with st.container():
@@ -100,7 +100,7 @@ if __name__ == "__main__":
                 insert_row_into_snowflake(bank_dict[output])
 
         with col2:
-            grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values())
+            grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
 
         # SCHOOL section
     col1, col2 = st.columns(2)
@@ -117,4 +117,4 @@ if __name__ == "__main__":
                 insert_row_into_snowflake(school_dict[output])
 
         with col2:
-            grab_and_plot_data('SCHOOL_VOTES', values=list(bank_dict.values())
+            grab_and_plot_data('SCHOOL_VOTES', values=list(bank_dict.values()))
