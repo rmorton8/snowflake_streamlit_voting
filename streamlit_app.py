@@ -1,8 +1,8 @@
 # Snowpark
 import snowflake.connector
-
 import streamlit as st
 import pandas as pd
+import plotly
 # import plotly.express as px
 
 st.set_page_config(
@@ -63,6 +63,7 @@ if __name__ == "__main__":
         with col2:
             covid_votes = grab_data_from_snowflake('COVID_VOTES')
             st.dataframe(covid_votes)
+#             st.plotly_chart(
 
 #             st.subheader('ABC Bank monitors credit card usage to detect fraudulent activity.')
 #             bank = st.selectbox("Which is less desirable?",
