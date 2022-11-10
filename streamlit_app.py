@@ -31,10 +31,10 @@ school_dict = {
 }
 
 
-def insert_row_into_snowflake(vote_choice, table_name):
+def insert_row_into_snowflake(vote_choice):
     my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
     with my_cnx.cursor() as my_cur:
-        my_cur.execute(f"insert into {table_name} values ('{vote_choice}')")
+        my_cur.execute(f"insert into covid_votes values ('{vote_choice}')")
     my_cnx.close()
     return
 
@@ -66,7 +66,7 @@ def grab_and_plot_data(table_name, values):
 if __name__ == "__main__":
     # Add header and a subheader
     st.title('Streamlit Voting Demo')
-    st.write(
+    st.subheader(
         "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
     st.header("Vote for the situations you think are less desirable!")
 
@@ -77,15 +77,15 @@ if __name__ == "__main__":
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
             output = st.selectbox("Which is less desirable?",
                                   tuple(covid_dict.keys()))
-            if not st.button('Vote', key=1):
+            if not st.button('Vote'):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
+                insert_row_into_snowflake(covid_dict[output])
 
         with col2:
             grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
-    
+
     # Bank section
     col1, col2 = st.columns(2)
     with st.container():
@@ -93,11 +93,11 @@ if __name__ == "__main__":
             st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
             output = st.selectbox("Which is less desirable?",
                                   tuple(bank_dict.keys()))
-            if not st.button('Vote', key=2):
+            if not st.button('Vote'):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
+                insert_row_into_snowflake(bank_dict[output])
 
         with col2:
             grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
@@ -110,11 +110,11 @@ if __name__ == "__main__":
                 "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
             output = st.selectbox("Which is less desirable?",
                                   tuple(school_dict.keys()))
-            if not st.button('Vote', key=3):
+            if not st.button('Vote'):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
+                insert_row_into_snowflake(school_dict[output])
 
         with col2:
-            grab_and_plot_data('SCHOOL_VOTES', values=list(bank_dict.values()))
+            grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
