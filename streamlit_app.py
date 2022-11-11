@@ -30,7 +30,7 @@ school_dict = {
     "Acceptance letter, but you were actually mean to be rejected!": 'false acceptance'
 }
 
-
+@st.cache()
 def insert_row_into_snowflake(vote_choice, table_name):
     my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
     with my_cnx.cursor() as my_cur:
@@ -47,7 +47,6 @@ def grab_data_from_snowflake(table_name):
     my_cnx.close()
     return output
 
-@st.cache(allow_output_mutation=True)
 def grab_and_plot_data(table_name, values):
     votes = grab_data_from_snowflake(table_name)
     if len(votes) >= 2:
