@@ -63,14 +63,14 @@ def grab_and_plot_data(table_name, values):
     return
 
 
-def generate_question_column(table_name, data_dict, question):
+def generate_question_column(table_name, data_dict, question, num):
     col1, col2 = st.columns(2)
     with st.container():
         with col1:
             st.subheader(question)
             output = st.radio("Which is less desirable?",
                                   tuple(data_dict.keys()))
-            if not st.button('Vote', key=1):
+            if not st.button('Vote', key=num):
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
@@ -92,14 +92,14 @@ if __name__ == "__main__":
     # COVID section
     with tab1:
         question = 'Bob thinks he may have contracted COVID-19, and goes to get tested.'
-        generate_question_column("COVID_VOTES", covid_dict, question)
+        generate_question_column("COVID_VOTES", covid_dict, question, 1)
 
     # Bank section
     with tab2:
         question = 'ABC Bank monitors credit card usage to detect any fraudulent activity.'
-        generate_question_column("BANK_VOTES", bank_dict, question)
+        generate_question_column("BANK_VOTES", bank_dict, question, 2)
 
     # SCHOOL section
     with tab3:
         question = "It's your senior year of highschool and you recieve an admissions letter from your dream school."
-        generate_question_column("SCHOOL_VOTES", school_dict, question)
+        generate_question_column("SCHOOL_VOTES", school_dict, question, 3)
