@@ -63,6 +63,24 @@ def grab_and_plot_data(table_name, values):
     return
 
 
+def generate_question_column(table_name, data_dict, question):
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.subheader(question)
+            output = st.radio("Which is less desirable?",
+                                  tuple(data_dict.keys()))
+            if not st.button('Vote', key=1):
+                st.write('please vote')
+            else:
+                st.write(f'thanks for voting!')
+                insert_row_into_snowflake(data_dict[output], table_name)
+
+        with col2:
+            grab_and_plot_data(table_name, values=list(data_dict.values()))
+    return
+
+
 if __name__ == "__main__":
     # Add header and a subheader
     st.title('Streamlit Voting Demo')
@@ -70,55 +88,53 @@ if __name__ == "__main__":
         "Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
     st.header("Vote for the situations you think are less desirable!")
 
-    tab1, tab2, tab3 = st.tabs(["COVID", "BANK", "SCHOOL"])
     # COVID section
-    with tab1:
-        col1, col2 = st.columns(2)
-        with st.container():
-            with col1:
-                st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
-                output = st.radio("Which is less desirable?",
-                                      tuple(covid_dict.keys()))
-                if not st.button('Vote', key=1):
-                    st.write('please vote')
-                else:
-                    st.write(f'thanks for voting!')
-                    insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
-
-            with col2:
-                grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
+    question = 'Bob thinks he may have contracted COVID-19, and goes to get tested.'
+    generate_question_column("COVID_VOTES", covid_dict, question)
+    # col1, col2 = st.columns(2)
+    # with st.container():
+    #     with col1:
+    #         st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
+    #         output = st.selectbox("Which is less desirable?",
+    #                               tuple(covid_dict.keys()))
+    #         if not st.button('Vote', key=1):
+    #             st.write('please vote')
+    #         else:
+    #             st.write(f'thanks for voting!')
+    #             insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
+    #
+    #     with col2:
+    #         grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
 
     # Bank section
-    with tab2:
-        col1, col2 = st.columns(2)
-        with st.container():
-            with col1:
-                st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
-                output = st.radio("Which is less desirable?",
-                                      tuple(bank_dict.keys()))
-                if not st.button('Vote', key=2):
-                    st.write('please vote')
-                else:
-                    st.write(f'thanks for voting!')
-                    insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
+            output = st.selectbox("Which is less desirable?",
+                                  tuple(bank_dict.keys()))
+            if not st.button('Vote', key=2):
+                st.write('please vote')
+            else:
+                st.write(f'thanks for voting!')
+                insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
 
-            with col2:
-                grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
+        with col2:
+            grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
 
-    # SCHOOL section
-    with tab3:
-        col1, col2 = st.columns(2)
-        with st.container():
-            with col1:
-                st.subheader(
-                    "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
-                output = st.radio("Which is less desirable?",
-                                      tuple(school_dict.keys()))
-                if not st.button('Vote', key=3):
-                    st.write('please vote')
-                else:
-                    st.write(f'thanks for voting!')
-                    insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
+        # SCHOOL section
+    col1, col2 = st.columns(2)
+    with st.container():
+        with col1:
+            st.subheader(
+                "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
+            output = st.selectbox("Which is less desirable?",
+                                  tuple(school_dict.keys()))
+            if not st.button('Vote', key=3):
+                st.write('please vote')
+            else:
+                st.write(f'thanks for voting!')
+                insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
 
-            with col2:
-                grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
+        with col2:
+            grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
