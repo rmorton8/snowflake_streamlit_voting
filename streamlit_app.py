@@ -71,7 +71,7 @@ if __name__ == "__main__":
     st.header("Vote for the situations you think are less desirable!")
 
     # COVID section
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with st.container():
         with col1:
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
@@ -83,13 +83,9 @@ if __name__ == "__main__":
                 st.write(f'thanks for voting!')
                 insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
 
-        with col2:
             grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
 
-    # Bank section
-    col1, col2 = st.columns(2)
-    with st.container():
-        with col1:
+        with col2:
             st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
             output = st.selectbox("Which is less desirable?",
                                   tuple(bank_dict.keys()))
@@ -99,13 +95,10 @@ if __name__ == "__main__":
                 st.write(f'thanks for voting!')
                 insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
 
-        with col2:
             grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
 
         # SCHOOL section
-    col1, col2 = st.columns(2)
-    with st.container():
-        with col1:
+        with col3:
             st.subheader(
                 "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
             output = st.selectbox("Which is less desirable?",
@@ -116,5 +109,4 @@ if __name__ == "__main__":
                 st.write(f'thanks for voting!')
                 insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
 
-        with col2:
             grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
