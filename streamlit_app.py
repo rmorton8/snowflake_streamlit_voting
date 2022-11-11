@@ -89,6 +89,7 @@ if __name__ == "__main__":
                 my_cnx.close()
 
         with col2:
+            st.write('temp')
             # my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
             # with my_cnx.cursor() as my_cur:
             #     my_cur.execute(f"select * from {table_name}")
