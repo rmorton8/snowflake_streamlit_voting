@@ -73,7 +73,6 @@ if __name__ == "__main__":
     # COVID section
     col1, col2 = st.columns(2)
     with st.container():
-        table_name = "COVID_VOTES"
         with col1:
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
             output = st.selectbox("Which is less desirable?",
@@ -82,28 +81,10 @@ if __name__ == "__main__":
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                vote_choice = covid_dict[output]
-                my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
-                with my_cnx.cursor() as my_cur:
-                    my_cur.execute(f"insert into {table_name} values ('{vote_choice}')")
-                my_cnx.close()
+                insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
 
         with col2:
-            my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
-            with my_cnx.cursor() as my_cur:
-                my_cur.execute(f"select * from {table_name}")
-                votes = pd.DataFrame(my_cur.fetchall())
-            my_cnx.close()
-            if len(votes) >= 2:
-                # transform votes
-                counts = votes.value_counts()
-                data_dict = {'choice': values, 'count': [counts[values[0]], counts[values[1]]]}
-                final_df = pd.DataFrame(data_dict)
-                # plot
-                fig = px.pie(final_df, values='count', names='choice', title='Voting Results')
-                st.plotly_chart(fig, use_container_width=True)
-            else:
-                st.write('waiting for votes')
+            grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
 
     # Bank section
     col1, col2 = st.columns(2)
