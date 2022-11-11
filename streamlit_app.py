@@ -30,7 +30,7 @@ school_dict = {
     "Acceptance letter, but you were actually mean to be rejected!": 'false acceptance'
 }
 
-@st.cache()
+
 def insert_row_into_snowflake(vote_choice, table_name):
     my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
     with my_cnx.cursor() as my_cur:
