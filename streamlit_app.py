@@ -77,7 +77,7 @@ if __name__ == "__main__":
         with st.container():
             with col1:
                 st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
-                output = st.selectbox("Which is less desirable?",
+                output = st.radio("Which is less desirable?",
                                       tuple(covid_dict.keys()))
                 if not st.button('Vote', key=1):
                     st.write('please vote')
