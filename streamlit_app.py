@@ -90,21 +90,21 @@ if __name__ == "__main__":
 
         with col2:
             st.write('tempZ')
-            # my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
-            # with my_cnx.cursor() as my_cur:
-            #     my_cur.execute(f"select * from {table_name}")
-            #     votes = pd.DataFrame(my_cur.fetchall())
-            # my_cnx.close()
-            # if len(votes) >= 2:
-            #     # transform votes
-            #     counts = votes.value_counts()
-            #     data_dict = {'choice': values, 'values': [counts[values[0]], counts[values[1]]]}
-            #     final_df = pd.DataFrame(data_dict)
-            #     # plot
-            #     fig = px.pie(final_df, values='values', names='options', title='Voting Results')
-            #     st.plotly_chart(fig, use_container_width=True)
-            # else:
-            #     st.write('waiting for votes')
+            my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
+            with my_cnx.cursor() as my_cur:
+                my_cur.execute(f"select * from {table_name}")
+                votes = pd.DataFrame(my_cur.fetchall())
+            my_cnx.close()
+            if len(votes) >= 2:
+                # transform votes
+                counts = votes.value_counts()
+                data_dict = {'choice': values, 'count': [counts[values[0]], counts[values[1]]]}
+                final_df = pd.DataFrame(data_dict)
+                # plot
+                fig = px.pie(final_df, values='count', names='choice', title='Voting Results')
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.write('waiting for votes')
 
     # Bank section
     col1, col2 = st.columns(2)
