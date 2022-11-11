@@ -93,52 +93,13 @@ if __name__ == "__main__":
     with tab1:
         question = 'Bob thinks he may have contracted COVID-19, and goes to get tested.'
         generate_question_column("COVID_VOTES", covid_dict, question)
-        # col1, col2 = st.columns(2)
-        # with st.container():
-        #     with col1:
-        #         st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
-        #         output = st.selectbox("Which is less desirable?",
-        #                               tuple(covid_dict.keys()))
-        #         if not st.button('Vote', key=1):
-        #             st.write('please vote')
-        #         else:
-        #             st.write(f'thanks for voting!')
-        #             insert_row_into_snowflake(covid_dict[output], 'COVID_VOTES')
-        #
-        #     with col2:
-        #         grab_and_plot_data('COVID_VOTES', values=list(covid_dict.values()))
 
     # Bank section
     with tab2:
-        col1, col2 = st.columns(2)
-        with st.container():
-            with col1:
-                st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
-                output = st.selectbox("Which is less desirable?",
-                                      tuple(bank_dict.keys()))
-                if not st.button('Vote', key=2):
-                    st.write('please vote')
-                else:
-                    st.write(f'thanks for voting!')
-                    insert_row_into_snowflake(bank_dict[output], 'BANK_VOTES')
-
-            with col2:
-                grab_and_plot_data('BANK_VOTES', values=list(bank_dict.values()))
+        question = 'ABC Bank monitors credit card usage to detect any fraudulent activity.'
+        generate_question_column("BANK_VOTES", bank_dict, question)
 
     # SCHOOL section
     with tab3:
-        col1, col2 = st.columns(2)
-        with st.container():
-            with col1:
-                st.subheader(
-                    "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
-                output = st.selectbox("Which is less desirable?",
-                                      tuple(school_dict.keys()))
-                if not st.button('Vote', key=3):
-                    st.write('please vote')
-                else:
-                    st.write(f'thanks for voting!')
-                    insert_row_into_snowflake(school_dict[output], 'SCHOOL_VOTES')
-
-            with col2:
-                grab_and_plot_data('SCHOOL_VOTES', values=list(school_dict.values()))
+        question = "It's your senior year of highschool and you recieve an admissions letter from your dream school."
+        generate_question_column("SCHOOL_VOTES", school_dict, question)
