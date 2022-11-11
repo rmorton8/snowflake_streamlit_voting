@@ -47,7 +47,7 @@ def grab_data_from_snowflake(table_name):
     my_cnx.close()
     return output
 
-@st.cache
+@st.cache(allow_output_mutation=True)
 def grab_and_plot_data(table_name, values):
     votes = grab_data_from_snowflake(table_name)
     if len(votes) >= 2:
