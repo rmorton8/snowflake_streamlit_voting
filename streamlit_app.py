@@ -94,7 +94,7 @@ if __name__ == "__main__":
         with st.container():
             with col1:
                 st.subheader('ABC Bank monitors credit card usage to detect any fraudulent activity.')
-                output = st.selectbox("Which is less desirable?",
+                output = st.radio("Which is less desirable?",
                                       tuple(bank_dict.keys()))
                 if not st.button('Vote', key=2):
                     st.write('please vote')
@@ -112,7 +112,7 @@ if __name__ == "__main__":
             with col1:
                 st.subheader(
                     "It's your senior year of highschool and you recieve an admissions letter from your dream school.")
-                output = st.selectbox("Which is less desirable?",
+                output = st.radio("Which is less desirable?",
                                       tuple(school_dict.keys()))
                 if not st.button('Vote', key=3):
                     st.write('please vote')
