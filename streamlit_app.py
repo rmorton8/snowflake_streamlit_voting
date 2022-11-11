@@ -73,6 +73,7 @@ if __name__ == "__main__":
     # COVID section
     col1, col2 = st.columns(2)
     with st.container():
+        table_name = "COVID_VOTES"
         with col1:
             st.subheader('Bob thinks he may have contracted COVID-19, and goes to get tested.')
             output = st.selectbox("Which is less desirable?",
@@ -81,7 +82,6 @@ if __name__ == "__main__":
                 st.write('please vote')
             else:
                 st.write(f'thanks for voting!')
-                table_name = "COVID_VOTES"
                 vote_choice = covid_dict[output]
                 my_cnx = snowflake.connector.connect(**st.secrets['snowflake'])
                 with my_cnx.cursor() as my_cur:
